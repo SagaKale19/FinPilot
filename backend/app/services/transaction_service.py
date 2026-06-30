@@ -21,8 +21,29 @@ def create_transaction(db: Session, transaction_data: TransactionCreate, user_id
     return new_transaction
 
 
-def get_user_transactions(db: Session, user_id: int):
-    return db.query(Transaction).filter(Transaction.user_id == user_id).all()
+def get_user_transactions(
+    db: Session,
+    user_id: int,
+    transaction_type=None,
+    category=None,
+    start_date=None,
+    end_date=None,
+):
+    query = db.query(Transaction).filter(Transaction.user_id == user_id)
+
+    if transaction_type:
+        query = query.filter(Transaction.type == transaction_type)
+
+    if category:
+        query = query.filter(Transaction.category == category)
+
+    if start_date:
+        query = query.filter(Transaction.transaction_date >= start_date)
+
+    if end_date:
+        query = query.filter(Transaction.transaction_date <= end_date)
+
+    return query.order_by(Transaction.transaction_date.desc()).all()
 
 
 def get_transaction_by_id(db: Session, transaction_id: int, user_id: int):

@@ -2,7 +2,8 @@ from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-
+from datetime import date
+from typing import Optional
 from app.api.auth import get_current_user
 from app.db.database import get_db
 from app.schemas.transaction import TransactionCreate, TransactionResponse, TransactionUpdate
@@ -28,10 +29,21 @@ def add_transaction(
 
 @router.get("/", response_model=List[TransactionResponse])
 def list_transactions(
+    transaction_type: Optional[str] = None,
+    category: Optional[str] = None,
+    start_date: Optional[date] = None,
+    end_date: Optional[date] = None,
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user),
 ):
-    return get_user_transactions(db, current_user.id)
+    return get_user_transactions(
+        db=db,
+        user_id=current_user.id,
+        transaction_type=transaction_type,
+        category=category,
+        start_date=start_date,
+        end_date=end_date,
+    )
 
 
 @router.get("/{transaction_id}", response_model=TransactionResponse)
