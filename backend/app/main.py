@@ -3,6 +3,7 @@ from sqlalchemy import text
 from app.api.transactions import router as transactions_router
 from app.db.database import engine
 from app.api.auth import router as auth_router
+from app.api.dashboard import router as dashboard_router
 
 app = FastAPI(
     title="FinPilot API",
@@ -12,6 +13,7 @@ app = FastAPI(
 
 app.include_router(auth_router)
 app.include_router(transactions_router)
+app.include_router(dashboard_router)
 
 @app.get("/")
 def health_check():
