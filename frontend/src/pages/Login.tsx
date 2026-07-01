@@ -21,30 +21,56 @@ function Login() {
       });
 
       localStorage.setItem("token", response.data.access_token);
-      setMessage("Login successful");
       navigate("/dashboard");
     } catch {
-      setMessage("Login failed");
+      setMessage("Invalid email or password");
     }
   };
 
   return (
-    <div>
-      <h1>FinPilot Login</h1>
+    <div className="flex min-h-screen items-center justify-center bg-gray-100 px-4">
+      <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow">
+        <h1 className="mb-2 text-3xl font-bold text-gray-900">FinPilot</h1>
+        <p className="mb-6 text-gray-500">
+          Personal Finance & Budget Management Platform
+        </p>
 
-      <input value={email} onChange={(e) => setEmail(e.target.value)} />
-      <br />
+        <div className="mb-4">
+          <label className="mb-1 block text-sm font-medium text-gray-700">
+            Email
+          </label>
+          <input
+            className="w-full rounded-lg border p-3 outline-none focus:border-blue-500"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
 
-      <input
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <br />
+        <div className="mb-6">
+          <label className="mb-1 block text-sm font-medium text-gray-700">
+            Password
+          </label>
+          <input
+            className="w-full rounded-lg border p-3 outline-none focus:border-blue-500"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
 
-      <button onClick={handleLogin}>Login</button>
+        <button
+          className="w-full rounded-lg bg-blue-600 py-3 font-semibold text-white hover:bg-blue-700"
+          onClick={handleLogin}
+        >
+          Login
+        </button>
 
-      <p>{message}</p>
+        {message && <p className="mt-4 text-sm text-red-600">{message}</p>}
+
+        <p className="mt-6 text-center text-xs text-gray-400">
+          Demo account is pre-filled for testing.
+        </p>
+      </div>
     </div>
   );
 }
