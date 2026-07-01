@@ -33,3 +33,25 @@ def get_dashboard_summary(db: Session, user_id: int):
         "balance": balance,
         "transaction_count": transaction_count,
     }
+
+def get_category_spending(db: Session, user_id: int):
+    results = (
+        db.query(
+            Transaction.category,
+            func.sum(Transaction.amount).label("total")
+        )
+        .filter(
+            Transaction.user_id == user_id,
+            Transaction.type == "expense"
+        )
+        .group_by(Transaction.category)
+        .all()
+    )
+
+    return [
+        {
+            "category": category,
+            "total": total
+        }
+        for category, total in results
+    ]
